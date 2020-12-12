@@ -1,27 +1,27 @@
 from pathlib import Path
 
-import pandas as pd
+import lightgbm as lgb
 import numpy as np
-from sklearn.ensemble import VotingClassifier, RandomForestClassifier, StackingClassifier
-from sklearn.linear_model import LogisticRegression
+import pandas as pd
 from sklearn.metrics import f1_score
 from sklearn.model_selection import cross_val_score, StratifiedKFold
-from sklearn.pipeline import Pipeline, make_pipeline
-import lightgbm as lgb
-from sklearn.preprocessing import StandardScaler
-from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
 
 from src.features import StatisticsExtractor, Imputer, PeriodStatistics, statistics, NACounter
+from src.ops import read_params
 
 if __name__ == '__main__':
-    data_path = Path("../data/raw")
-    train = pd.read_csv(data_path / 'train.csv')
-    test = pd.read_csv(data_path / 'test.csv')
+    params = read_params("params.yaml")
+    seed = params['randomness']['seed']
+
+    data_path = Path(params['paths']['data_dir'])
+    train = pd.read_csv(data_path / params['paths']['train_path'])
+    test = pd.read_csv(data_path / params['paths']['test_path'])
 
     day_columns = [c for c in train.columns if 'Day' in c]
     day_columns = list(sorted(day_columns, key=lambda x: int(x.split()[1])))
 
-    target_column = 'Culture'
+    target_column = params['columns']['target']
     feature_columns = [col for col in train.columns if col != target_column]
 
     feature_extraction_pipeline = Pipeline([
@@ -31,13 +31,8 @@ if __name__ == '__main__':
         ('month_statistics', PeriodStatistics(day_columns, 30, list(statistics.keys()))),
     ])
 
-    model = VotingClassifier([
-        ('rf', RandomForestClassifier(random_state=42)),
-        ('lgb', lgb.LGBMClassifier(max_depth=4, n_estimators=400, random_state=42)),
-        ('svr', make_pipeline(StandardScaler(),
-                              LinearSVC(random_state=42))),
-        ('log_reg', make_pipeline(StandardScaler(),
-                                  LogisticRegression(random_state=42))),
+    model = Pipeline([
+        ('lgb', lgb.LGBMClassifier(seed=seed, **params['model']['params'])),
     ])
 
     pipeline = Pipeline([
@@ -45,7 +40,7 @@ if __name__ == '__main__':
         ('model', model)
     ])
 
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    cv = StratifiedKFold(random_state=seed, **params['cv'])
     scores = cross_val_score(pipeline,
                              train[feature_columns], train[target_column],
                              scoring=lambda est, x, y: f1_score(y, est.predict(x), average='weighted'),

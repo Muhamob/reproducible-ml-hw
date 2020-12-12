@@ -1,0 +1,17 @@
+paths:
+  data_dir: "../data"
+  train_path: "raw/train.csv"
+  test_path: "raw/train.csv"
+columns:
+  target: "Culture"
+randomness:
+  seed: 42
+cv:
+  n_splits: 5
+  shuffle: True
+model:
+  type: "lgb"
+  name: "lgb1"
+  params:
+    max_depth: 4
+    n_estimators: 40
