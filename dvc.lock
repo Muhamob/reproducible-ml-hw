@@ -1,0 +1,63 @@
+create_model:
+  cmd: PYTHONPATH=. python src/create_model.py
+  deps:
+  - path: src/create_model.py
+    md5: c1a64a65e131d74375ff41ac7b1582fb
+    size: 559
+  - path: src/params.yaml
+    md5: e6159552f70c081f2354b0697af90dc4
+    size: 393
+  outs:
+  - path: models/model_base.pickle
+    md5: 565b81dfff97c2bda73cc9eecc6cca67
+    size: 922
+eval_model:
+  cmd: PYTHONPATH=. python src/evaluate_model.py
+  deps:
+  - path: models/model_base.pickle
+    md5: 565b81dfff97c2bda73cc9eecc6cca67
+    size: 922
+  - path: src/evaluate_model.py
+    md5: 58d3a952e4831e9021a50c78dbad4be0
+    size: 1446
+  - path: src/params.yaml
+    md5: e6159552f70c081f2354b0697af90dc4
+    size: 393
+feature_extraction:
+  cmd: PYTHONPATH=. python src/feature_extraction.py
+  deps:
+  - path: data/raw/train.csv
+    md5: de76224a802ce53a510d7879b30389b5
+    size: 7161090
+  - path: src/feature_extraction.py
+    md5: be98c8b2ccc2c2ffac0b12ebd8d56bf2
+    size: 1394
+  - path: src/load_data.py
+    md5: 132127e2249af196142714129667396c
+    size: 800
+  - path: src/params.yaml
+    md5: e6159552f70c081f2354b0697af90dc4
+    size: 393
+  outs:
+  - path: data/processed/features.csv
+    md5: 9409e32aa6b1991c85217a61eccd2c7f
+    size: 10616661
+  - path: models/feature_extractor.pickle
+    md5: fde46394a1a510740422e03e79de2256
+    size: 9355037
+fit_model:
+  cmd: PYTHONPATH=. python src/fit_model.py
+  deps:
+  - path: models/model_base.pickle
+    md5: 565b81dfff97c2bda73cc9eecc6cca67
+    size: 922
+  - path: src/fit_model.py
+    md5: 95062f65505c62e5e1ec44931e38970a
+    size: 776
+  - path: src/params.yaml
+    md5: e6159552f70c081f2354b0697af90dc4
+    size: 393
+  outs:
+  - path: models/model.pickle
+    md5: 040f1ed601760b116db49d301e3bf518
+    size: 1835145

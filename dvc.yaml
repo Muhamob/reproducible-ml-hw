@@ -1,0 +1,32 @@
+stages:
+  create_model:
+    cmd: PYTHONPATH=. python src/create_model.py
+    deps:
+    - src/create_model.py
+    - src/params.yaml
+    outs:
+    - models/model_base.pickle
+  eval_model:
+    cmd: PYTHONPATH=. python src/evaluate_model.py
+    deps:
+    - models/model_base.pickle
+    - src/evaluate_model.py
+    - src/params.yaml
+  feature_extraction:
+    cmd: PYTHONPATH=. python src/feature_extraction.py
+    deps:
+    - data/raw/train.csv
+    - src/feature_extraction.py
+    - src/load_data.py
+    - src/params.yaml
+    outs:
+    - data/processed/features.csv
+    - models/feature_extractor.pickle
+  fit_model:
+    cmd: PYTHONPATH=. python src/fit_model.py
+    deps:
+    - models/model_base.pickle
+    - src/fit_model.py
+    - src/params.yaml
+    outs:
+    - models/model.pickle

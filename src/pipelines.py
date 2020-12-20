@@ -19,5 +19,5 @@ def fit_pipeline(params: dict):
 
 if __name__ == "__main__":
     params = read_params("params.yaml")
-    # eval_pipeline(params)
-    fit_model(params)
+    eval_pipeline(params)
+    # fit_model(params)

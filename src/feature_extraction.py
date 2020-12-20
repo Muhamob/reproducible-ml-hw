@@ -4,12 +4,13 @@ from sklearn.pipeline import Pipeline
 
 from src.features import NACounter, Imputer, StatisticsExtractor, PeriodStatistics, statistics
 from src.load_data import load_data
-from src.ops import ROOT_DIR
+from src.ops import ROOT_DIR, read_params
 
 __step_name: str = "feature-extractor"
 
 
 def extract_features(params):
+    print("run feature extraction")
     data = load_data(params)
     day_columns = data['day_columns']
 
@@ -32,3 +33,9 @@ def extract_features(params):
     features_path = ROOT_DIR / params[__step_name]['features_path']
     features[data['target_column']] = data['train_df'][data['target_column']]
     features.to_csv(features_path, index=False)
+    print("done feature extraction")
+
+
+if __name__ == "__main__":
+    params = read_params("src/params.yaml")
+    extract_features(params)
