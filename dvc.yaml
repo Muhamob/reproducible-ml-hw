@@ -9,6 +9,7 @@ stages:
   eval_model:
     cmd: PYTHONPATH=. python src/evaluate_model.py
     deps:
+    - models/feature_extractor.pickle
     - models/model_base.pickle
     - src/evaluate_model.py
     - src/params.yaml
@@ -25,6 +26,7 @@ stages:
   fit_model:
     cmd: PYTHONPATH=. python src/fit_model.py
     deps:
+    - data/processed/features.csv
     - models/model_base.pickle
     - src/fit_model.py
     - src/params.yaml

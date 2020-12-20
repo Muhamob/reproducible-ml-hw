@@ -14,6 +14,9 @@ create_model:
 eval_model:
   cmd: PYTHONPATH=. python src/evaluate_model.py
   deps:
+  - path: models/feature_extractor.pickle
+    md5: fde46394a1a510740422e03e79de2256
+    size: 9355037
   - path: models/model_base.pickle
     md5: 565b81dfff97c2bda73cc9eecc6cca67
     size: 922
@@ -48,6 +51,9 @@ feature_extraction:
 fit_model:
   cmd: PYTHONPATH=. python src/fit_model.py
   deps:
+  - path: data/processed/features.csv
+    md5: 9409e32aa6b1991c85217a61eccd2c7f
+    size: 10616661
   - path: models/model_base.pickle
     md5: 565b81dfff97c2bda73cc9eecc6cca67
     size: 922
@@ -59,5 +65,5 @@ fit_model:
     size: 393
   outs:
   - path: models/model.pickle
-    md5: 040f1ed601760b116db49d301e3bf518
-    size: 1835145
+    md5: 43ab89a267c9f93b8ef2adc281a6ac41
+    size: 1835147

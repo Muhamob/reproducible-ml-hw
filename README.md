@@ -18,3 +18,9 @@ source venv/bin/activate
 pip install -U pip
 pip install -m requirements.txt
 ```
+3. Не установлен graphviz
+
+## DVC pipelines
+Граф пайплайна 
+
+![DAG](dag.png)
