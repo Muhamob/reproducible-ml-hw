@@ -1,5 +1,6 @@
 import pickle
 
+import mlflow
 import numpy as np
 import pandas as pd
 from sklearn.metrics import f1_score
@@ -38,6 +39,11 @@ def eval_model(params: dict):
                              X_train, y_train,
                              scoring=lambda est, x, y: f1_score(y, est.predict(x), average='weighted'),
                              cv=cv)
+
+    with mlflow.start_run():
+        mlflow.log_metric("f1-weighted-cv-mean", np.mean(scores))
+        mlflow.log_metric("f1-weighted-cv-std", np.std(scores))
+        mlflow.log_params(params)
 
     print("Mean score:", np.mean(scores))
     print("done model eval")

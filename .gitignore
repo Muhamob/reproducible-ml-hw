@@ -78,8 +78,6 @@ target/
 # exclude data from source control by default
 /data/
 
-models/
-
 # Mac OS-specific storage files
 .DS_Store
 
@@ -89,3 +87,6 @@ models/
 
 # Mypy cache
 .mypy_cache/
+
+models/
+mlruns/
