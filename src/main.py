@@ -14,7 +14,8 @@ if __name__ == '__main__':
     params = read_params("params.yaml")
     seed = params['randomness']['seed']
 
-    data_path = Path(params['paths']['data_dir'])
+    root_path = Path(params['paths']['root_path'])
+    data_path = root_path / Path(params['paths']['data_dir'])
     train = pd.read_csv(data_path / params['paths']['train_path'])
     test = pd.read_csv(data_path / params['paths']['test_path'])
 

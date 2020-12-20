@@ -1,4 +1,9 @@
+import os
+from pathlib import Path
+
 import yaml
+
+ROOT_DIR = Path(os.path.abspath(__file__)).parents[1]
 
 
 def batch(iterable, n=1):

@@ -1,17 +1,18 @@
-paths:
-  data_dir: "../data"
-  train_path: "raw/train.csv"
-  test_path: "raw/train.csv"
-columns:
-  target: "Culture"
-randomness:
-  seed: 42
-cv:
-  n_splits: 5
-  shuffle: True
+data-reader:
+  train_csv: "data/raw/train.csv"
+  test_csv: "data/raw/test.csv"
+  target_col: "Culture"
+feature-extractor:
+  pipeline_path: "models/feature_extractor.pickle"
+  features_path: "data/processed/features.csv"
 model:
-  type: "lgb"
-  name: "lgb1"
+  path:
+    fitted: "models/model.pickle"
+    base: "models/model_base.pickle"
   params:
     max_depth: 4
-    n_estimators: 40
+    n_estimators: 250
+  eval:
+    k: 5
+constants:
+  seed: 42
