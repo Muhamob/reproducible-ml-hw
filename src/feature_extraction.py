@@ -1,5 +1,6 @@
 import pickle
 
+import click
 from sklearn.pipeline import Pipeline
 
 from src.features import NACounter, Imputer, StatisticsExtractor, PeriodStatistics, statistics
@@ -9,9 +10,15 @@ from src.ops import ROOT_DIR, read_params
 __step_name: str = "feature-extractor"
 
 
-def extract_features(params):
+@click.command()
+@click.option("-p", "--params",
+              help="path to params.yaml file",
+              type=click.Path(exists=True),
+              default=lambda: ROOT_DIR.joinpath("src/params.yaml").as_posix())
+def extract_features(params: str):
+    params_dict = read_params(params)
     print("run feature extraction")
-    data = load_data(params)
+    data = load_data(params_dict)
     day_columns = data['day_columns']
 
     feature_extraction_pipeline = Pipeline([
@@ -26,16 +33,15 @@ def extract_features(params):
         data['train_df'][data['target_column']]
     )
 
-    feature_extractor_path = ROOT_DIR / params[__step_name]["pipeline_path"]
+    feature_extractor_path = ROOT_DIR / params_dict[__step_name]["pipeline_path"]
     with open(feature_extractor_path, "wb") as f:
         pickle.dump(feature_extraction_pipeline, f)
 
-    features_path = ROOT_DIR / params[__step_name]['features_path']
+    features_path = ROOT_DIR / params_dict[__step_name]['features_path']
     features[data['target_column']] = data['train_df'][data['target_column']]
     features.to_csv(features_path, index=False)
     print("done feature extraction")
 
 
 if __name__ == "__main__":
-    params = read_params("src/params.yaml")
-    extract_features(params)
+    extract_features()

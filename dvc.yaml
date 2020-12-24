@@ -1,30 +1,30 @@
 stages:
-  create_model:
-    cmd: PYTHONPATH=. python src/create_model.py
-    deps:
-    - src/create_model.py
-    - src/params.yaml
-    outs:
-    - models/model_base.pickle
-  eval_model:
-    cmd: PYTHONPATH=. python src/evaluate_model.py
-    deps:
-    - models/feature_extractor.pickle
-    - models/model_base.pickle
-    - src/evaluate_model.py
-    - src/params.yaml
   feature_extraction:
-    cmd: PYTHONPATH=. python src/feature_extraction.py
+    cmd: PYTHONPATH=. python src/feature_extraction.py --params src/params.yaml
     deps:
-    - data/raw/train.csv
+    - data/raw/train.csv.gz
     - src/feature_extraction.py
     - src/load_data.py
     - src/params.yaml
     outs:
     - data/processed/features.csv
     - models/feature_extractor.pickle
+  create_model:
+    cmd: PYTHONPATH=. python src/create_model.py --params src/params.yaml
+    deps:
+    - src/create_model.py
+    - src/params.yaml
+    outs:
+    - models/model_base.pickle
+  eval_model:
+    cmd: PYTHONPATH=. python src/evaluate_model.py --params src/params.yaml
+    deps:
+    - models/feature_extractor.pickle
+    - models/model_base.pickle
+    - src/evaluate_model.py
+    - src/params.yaml
   fit_model:
-    cmd: PYTHONPATH=. python src/fit_model.py
+    cmd: PYTHONPATH=. python src/fit_model.py --params src/params.yaml
     deps:
     - data/processed/features.csv
     - models/model_base.pickle

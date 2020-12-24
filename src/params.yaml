@@ -1,6 +1,6 @@
 data-reader:
-  train_csv: "data/raw/train.csv"
-  test_csv: "data/raw/test.csv"
+  train_csv: "data/raw/train.csv.gz"
+  test_csv: "data/raw/test.csv.gz"
   target_col: "Culture"
 feature-extractor:
   pipeline_path: "models/feature_extractor.pickle"
