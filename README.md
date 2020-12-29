@@ -16,7 +16,7 @@ source venv/bin/activate
 2. Установить подходящие библиотеки
 ```bash
 pip install -U pip
-pip install -m requirements.txt
+pip install -r requirements.txt
 ```
 3. Не установлен graphviz
 
